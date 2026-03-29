@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Intrinsic Value in Everyday Object</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Navigation Bar (city sim mode) -->
+  <nav id="navbar" class="navbar hidden">
+    <div class="nav-content">
+      <h1 class="nav-title">Intrinsic Value in Everyday Object</h1>
+      <button class="nav-button" onclick="handleReturnToLanding()">← Back to Start</button>
+    </div>
+  </nav>
+
+  <!-- ======================================================
+       LANDING
+  ====================================================== -->
+  <div id="intro-panel" class="intro-panel">
+    <div class="intro-content">
+
+      <div class="landing-header">
+        <h1>Intrinsic Value in Everyday Object</h1>
+        <p class="landing-lead">This project investigates price volatility in relation to currency through the lens of everyday objects — using the banana as a central medium. It examines how fluctuations in economic systems quietly shape our emotional relationships with commodities we encounter daily.</p>
+      </div>
+
+      <!-- Three entry points -->
+      <div class="entry-grid">
+
+        <div class="entry-card">
+          <div class="entry-card-inner">
+            <span class="entry-number">01</span>
+            <h2>Banana Poem Generator</h2>
+            <p>Hold a banana to your camera. A poem is generated in real time from the words of the project essays, responding to the proximity of the banana.</p>
+          </div>
+          <button class="entry-button" onclick="openBananaPanel()">Open Generator →</button>
+        </div>
+
+        <div class="entry-card">
+          <div class="entry-card-inner">
+            <span class="entry-number">02</span>
+            <h2>Price Volatility Simulator</h2>
+            <p>How many minutes of work does it take to afford the same item? Compare Tokyo and New York City side by side using wage-to-price ratios to make purchasing power feel immediate and personal.</p>
+          </div>
+          <button class="entry-button" onclick="openVolatility()">Explore Prices →</button>
+        </div>
+
+        <div class="entry-card entry-card-wide">
+          <div class="entry-card-inner">
+            <span class="entry-number">03</span>
+            <h2>City Simulator</h2>
+            <p>The monthly budget is based on a median income. Make daily choices, buy what you need, and see how long your budget lasts.</p>
+          </div>
+          <div class="city-sim-buttons">
+            <div class="city-sim-option">
+              <div class="city-sim-info">
+                <strong>Tokyo</strong>
+                <span>¥471,000 gross / ¥386,200 take-home</span>
+              </div>
+              <button class="city-button" onclick="selectCity('tokyo')">Choose Tokyo</button>
+            </div>
+            <div class="city-sim-divider"></div>
+            <div class="city-sim-option">
+              <div class="city-sim-info">
+                <strong>New York City</strong>
+                <span>$6,643 gross / $5,447 take-home</span>
+              </div>
+              <button class="city-button" onclick="selectCity('nyc')">Choose NYC</button>
+            </div>
+            <div class="city-sim-divider"></div>
+            <div class="city-sim-option">
+              <div class="city-sim-info">
+                <strong>Compare</strong>
+                <span>View both cities side by side</span>
+              </div>
+              <button class="city-button" onclick="selectCity('both')">Compare Both</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       BANANA POEM PANEL
+  ====================================================== -->
+  <div id="banana-panel" class="volatility-panel hidden">
+    <div class="volatility-content banana-content">
+
+      <div class="volatility-header">
+        <button class="back-button-top" onclick="closeBananaPanel()">← Back</button>
+        <div class="volatility-title-area">
+          <h1>Banana Poem Generator</h1>
+          <p class="volatility-subtitle">Hold a banana to your camera — a poem will appear</p>
+        </div>
+        <div class="header-spacer"></div>
+      </div>
+
+      <!-- Scene controls -->
+      <div class="banana-controls">
+        <button class="volatility-nav-btn" onclick="setScene('tokyo')">← Tokyo</button>
+        <span id="banana-city-label" class="banana-city-label">Tokyo + Manhattan</span>
+        <button class="volatility-nav-btn" onclick="setScene('both')">Both</button>
+        <button class="volatility-nav-btn" onclick="setScene('manhattan')">Manhattan →</button>
+      </div>
+
+      <!-- Cinematic viewport -->
+      <div class="banana-viewport">
+
+        <div class="scene scene-both">
+          <img class="tokyo" id="tokyoImg" src="../banana_images/tokyo.png" alt="Tokyo">
+          <div class="tokyo-collage">
+            <img class="collage-sticker tokyo-sticker-10"   src="../banana_images/10.png"     alt="">
+            <img class="collage-sticker tokyo-sticker-100"  src="../banana_images/100.png"    alt="">
+            <img class="collage-sticker tokyo-sticker-1000" src="../banana_images/1000.png"   alt="">
+            <img class="collage-sticker tokyo-sticker-1"    src="../banana_images/tokyo1.png" alt="">
+            <img class="collage-sticker tokyo-sticker-2"    src="../banana_images/tokyo2.png" alt="">
+            <img class="collage-sticker tokyo-sticker-3"    src="../banana_images/tokyo3.png" alt="">
+            <img class="collage-sticker tokyo-sticker-1111" src="../banana_images/1111.png"   alt="">
+          </div>
+          <img class="manhattan" id="manhattanImg" src="../banana_images/manahttan.jpg" alt="Manhattan">
+          <div class="manhattan-collage">
+            <img class="collage-sticker mh01"         src="../banana_images/mh01.png" alt="">
+            <img class="collage-sticker mh02"         src="../banana_images/mh02.png" alt="">
+            <img class="collage-sticker mh03"         src="../banana_images/mh03.png" alt="">
+            <img class="collage-sticker sticker-1111" src="../banana_images/1111.png" alt="">
+            <img class="collage-sticker sticker-tiff" src="../banana_images/tiiff.png" alt="">
+          </div>
+        </div>
+
+        <div class="camera-layer">
+          <video id="video" playsinline></video>
+        </div>
+
+        <div class="banana-cutout-layer">
+          <canvas id="bananaCanvas"></canvas>
+          <div class="poem-frame" id="poemFrame">
+            <p class="poem-text" id="poemText"></p>
+          </div>
+        </div>
+
+      </div><!-- .banana-viewport -->
+
+      <!-- Marquee ticker -->
+      <div class="marquee-stack">
+        <div class="marquee-bar marquee-bar-1">
+          <div class="marquee-track marquee-speed-1" data-track="1"></div>
+        </div>
+        <div class="marquee-bar marquee-bar-2">
+          <div class="marquee-track marquee-speed-2" data-track="2"></div>
+        </div>
+        <div class="marquee-bar marquee-bar-3">
+          <div class="marquee-track marquee-speed-3" data-track="3"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ======================================================
+       PRICE VOLATILITY PANEL
+  ====================================================== -->
+  <div id="volatility-panel" class="volatility-panel hidden">
+    <div class="volatility-content">
+      <div class="volatility-header">
+        <button class="back-button-top" onclick="closeVolatility()">← Back</button>
+        <div class="volatility-title-area">
+          <h1>Price Volatility Simulator</h1>
+          <p class="volatility-subtitle">Compare wage-to-price ratios across the same everyday items</p>
+        </div>
+        <div class="header-spacer"></div>
+      </div>
+
+      <div class="volatility-progress-container">
+        <span id="volatility-progress">1 / 30</span>
+        <div class="volatility-progress-track">
+          <div id="volatility-progress-bar" class="volatility-progress-fill"></div>
+        </div>
+      </div>
+
+      <h2 id="volatility-item-name" class="volatility-item-title">Loading...</h2>
+
+      <div id="volatility-difference" class="volatility-difference hidden">
+        <span id="volatility-diff-value" class="volatility-diff-text"></span>
+        <span id="volatility-diff-percent" class="volatility-diff-percent"></span>
+      </div>
+
+      <div class="volatility-main-area">
+        <div class="volatility-left">
+          <div class="volatility-single-display">
+            <div id="volatility-card" class="volatility-card">
+              <div class="volatility-img-container">
+                <img id="volatility-img" src="" alt="Item">
+              </div>
+              <div class="volatility-price-tag">
+                <span id="volatility-price" class="volatility-price-main">¥0</span>
+                <span id="volatility-price-converted" class="volatility-price-sub"></span>
+              </div>
+            </div>
+            <div id="volatility-city-indicator" class="volatility-city-indicator">Tokyo</div>
+          </div>
+        </div>
+
+        <div class="volatility-right">
+          <div class="sc-panel" id="sc-panel">
+            <div class="sc-panel-header">
+              <h3>Supply Chain</h3>
+              <span class="sc-panel-city" id="sc-panel-city">TOKYO</span>
+            </div>
+            <div class="sc-panel-rows" id="sc-panel-rows"></div>
+            <div class="sc-panel-total" id="sc-panel-total"></div>
+            <div class="sc-panel-bar" id="sc-panel-bar"></div>
+            <p class="sc-panel-note">Prices are estimates. Actual supply chain costs vary by origin, season, and market conditions.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="volatility-controls">
+        <button class="volatility-nav-btn" onclick="prevItem()">← Prev</button>
+        <button id="volatility-play-btn" class="volatility-play-btn" onclick="togglePlayPause()">▶ Play</button>
+        <button class="volatility-nav-btn" onclick="nextItem()">Next →</button>
+      </div>
+
+      <div id="volatility-dots" class="volatility-dots"></div>
+
+      <div class="labor-insight-container" id="labor-insight">
+        <h4>What 1 Hour of Work Buys</h4>
+        <p id="labor-current-item" class="labor-current-item">Loading labor-time comparison...</p>
+        <div class="labor-city-grid">
+          <div class="labor-city-card">
+            <div class="labor-city-head">
+              <span class="labor-city-name">TOKYO</span>
+              <span id="tokyo-hourly-wage" class="labor-hourly-wage">¥0/hr</span>
+            </div>
+            <ul id="tokyo-labor-list" class="labor-buy-list"></ul>
+          </div>
+          <div class="labor-city-card">
+            <div class="labor-city-head">
+              <span class="labor-city-name">NEW YORK CITY</span>
+              <span id="nyc-hourly-wage" class="labor-hourly-wage">$0.00/hr</span>
+            </div>
+            <ul id="nyc-labor-list" class="labor-buy-list"></ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ======================================================
+       CITY SIMULATOR
+  ====================================================== -->
+  <div class="container">
+    <div class="city-section tokyo">
+      <div class="city-header">
+        <h1>TOKYO</h1>
+        <button class="currency-toggle" id="tokyo-currency-toggle" onclick="toggleTokyoCurrency()">
+          Show prices in USD
+        </button>
+      </div>
+      <div class="budget-calculator">
+        <div class="day-counter">Day <span id="tokyo-day">1</span>/30</div>
+        <div class="budget-row">
+          <span>Starting Budget:</span>
+          <span class="amount"><span id="tokyo-starting-symbol">¥</span><span id="tokyo-starting">201,200</span></span>
+        </div>
+        <div class="budget-row expense">
+          <span>Items Purchased Today:</span>
+          <span class="amount">-<span id="tokyo-total-symbol">¥</span><span id="tokyo-total">0</span></span>
+        </div>
+        <div id="tokyo-items-list" class="items-list"></div>
+        <hr>
+        <div class="budget-row remaining">
+          <span>Remaining Budget:</span>
+          <span class="amount"><span id="tokyo-remaining-symbol">¥</span><span id="tokyo-remaining">201,200</span></span>
+        </div>
+        <button class="submit-day-button" onclick="submitDay('tokyo')">End Day & Continue →</button>
+      </div>
+      <div id="tokyo-items" class="items-grid"></div>
+    </div>
+
+    <div class="city-section nyc">
+      <div class="city-header">
+        <h1>NYC</h1>
+      </div>
+      <div class="budget-calculator">
+        <div class="day-counter">Day <span id="nyc-day">1</span>/30</div>
+        <div class="budget-row">
+          <span>Starting Budget:</span>
+          <span class="amount">$<span id="nyc-starting">2,247.00</span></span>
+        </div>
+        <div class="budget-row expense">
+          <span>Items Purchased Today:</span>
+          <span class="amount">-$<span id="nyc-total">0.00</span></span>
+        </div>
+        <div id="nyc-items-list" class="items-list"></div>
+        <hr>
+        <div class="budget-row remaining">
+          <span>Remaining Budget:</span>
+          <span class="amount">$<span id="nyc-remaining">2,247.00</span></span>
+        </div>
+        <button class="submit-day-button" onclick="submitDay('nyc')">End Day & Continue →</button>
+      </div>
+      <div id="nyc-items" class="items-grid"></div>
+    </div>
+  </div>
+
+  <!-- Scripts: proposal_review interaction first, then combined main -->
+  <script src="supply-chain.js"></script>
+  <script src="interaction/data.js"></script>
+  <script src="interaction/state.js"></script>
+  <script src="interaction/currency.js"></script>
+  <script src="interaction/volatility.js"></script>
+  <script src="interaction/items.js"></script>
+  <script src="interaction/budget.js"></script>
+  <script src="interaction/navigation.js"></script>
+  <script src="main.js" defer></script>
+</body>
+</html>
